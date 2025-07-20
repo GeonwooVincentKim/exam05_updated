@@ -17,6 +17,7 @@ public:
     bigint(const std::string &str); // Constructor desde string.
     bigint(unsigned long long num); // Constructor desde entero.
     bigint(const bigint &other); // Constructor de copia.
+    bigint& operator=(const bigint &other); // Operador de asignación.
 
     // Operadores aritméticos
     bigint operator+(const bigint &other) const;

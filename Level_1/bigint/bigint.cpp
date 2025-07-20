@@ -14,6 +14,13 @@ bigint::bigint(unsigned long long num) : value(std::to_string(num)) {}
 
 bigint::bigint(const bigint &other) : value(other.value) {}
 
+bigint& bigint::operator=(const bigint &other) {
+    if (this != &other) {
+        value = other.value;
+    }
+    return *this;
+}
+
 void bigint::remove_leading_zeros() {
     value.erase(0, value.find_first_not_of('0'));
     if (value.empty()) {

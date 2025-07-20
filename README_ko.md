@@ -21,6 +21,8 @@ new_exam05/
 │   ├── string_bigint/
 │   │   ├── bigint.hpp             # 문자열 기반 큰 정수 클래스 헤더
 │   │   ├── bigint.cpp             # 문자열 기반 큰 정수 클래스 구현
+│   │   ├── bigint_refactored.hpp  # 리팩토링된 헤더
+│   │   ├── bigint_refactored.cpp  # 리팩토링된 구현
 │   │   └── main.cpp               # 테스트 메인
 │   ├── vect2/
 │   │   ├── vect2.hpp      # 2차원 벡터 클래스 헤더

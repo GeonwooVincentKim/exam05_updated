@@ -17,6 +17,7 @@ public:
     // Constructors
     bigint() : value("0") {}
     bigint(unsigned int n);
+    bigint(const std::string& str) : value(str) {}
     bigint(const bigint& other) : value(other.value) {}
     ~bigint() = default;
 

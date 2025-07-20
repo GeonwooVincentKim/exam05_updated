@@ -1,9 +1,9 @@
-#include "searchable_bag.hpp"
+#include "searchable_bag_simple.hpp"
 
 // new code
-#include "searchable_tree_bag.hpp"
-#include "searchable_array_bag.hpp"
-#include "set.hpp"
+#include "searchable_tree_bag_simple.hpp"
+#include "searchable_array_bag_simple.hpp"
+#include "set_simple.hpp"
 //end new code
 
 #include <iostream>

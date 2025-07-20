@@ -41,6 +41,7 @@ void    destroy_tree(node *n)
 
 void    unexpected(char c, int i)
 {
+    (void)i; // Suppress unused parameter warning
     if (c)
         printf("unexpected %c\n", c);
     else
@@ -113,7 +114,7 @@ node    *parse_primary(char **s)
         }
         return ret;
     }
-    if (isdigit(**s))
+    if (isdigit((unsigned char)**s))
     {
         node ret = {.type = VAL, .val = **s - '0'};
         (*s)++;
@@ -157,6 +158,8 @@ int eval_tree(node *tree)
             return eval_tree(tree->l) * eval_tree(tree->r);
         case VAL:
             return tree->val;
+        default:
+            return 0; // Should never reach here
     }
 }
 

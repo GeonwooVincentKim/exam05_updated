@@ -68,7 +68,7 @@ int parse_factor(Parser *p) {
             unexpected_token(p);
         p->pos++; // Saltar ')'
         return result;
-    } else if (isdigit(p->expr[p->pos])) {
+    } else if (isdigit((unsigned char)p->expr[p->pos])) {
         return p->expr[p->pos++] - '0'; // Convertir carácter a número
     } else {
         unexpected_token(p);

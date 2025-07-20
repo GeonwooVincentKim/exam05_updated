@@ -141,24 +141,14 @@ int vect2::getContainer_elements(int array) const
 
     bool	vect2::operator==(const vect2& other) const
     {
-        if ((this->getContainer_elements(0) == other.getContainer_elements(0)) && 
-            (this->getContainer_elements(1) == other.getContainer_elements(1)))
-        {
-            std::cout << "THE TRUTH RETURNED!--> " << std::flush;
-            return (true); // handle self-assignment
-        }
-        return (false);
+        return (this->getContainer_elements(0) == other.getContainer_elements(0)) && 
+               (this->getContainer_elements(1) == other.getContainer_elements(1));
     }
 
     bool	vect2::operator!=(const vect2& other) const
     {
-        if ((this->getContainer_elements(0) != other.getContainer_elements(0)) && 
-            (this->getContainer_elements(1) != other.getContainer_elements(1)))
-        {
-            std::cout << "THE TRUTH RETURNED!--> " << std::flush;
-            return (true); // handle self-assignment
-        }
-        return (false);
+        return (this->getContainer_elements(0) != other.getContainer_elements(0)) || 
+               (this->getContainer_elements(1) != other.getContainer_elements(1));
     }
 
 

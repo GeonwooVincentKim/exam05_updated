@@ -3,12 +3,14 @@
 // handle stdin input
 void	ft_bsq_from_stdin(FILE *stream)
 {
-	
+	(void)stream; // Suppress unused parameter warning
+	// TODO: Implement stdin processing
 }
 
 //fopen(const char *pathname, const char *mode);
 void	ft_bsq(char **argv)
 {
+	(void)argv; // Suppress unused parameter warning
 	// FILE *file = fopen(stdin, "r");
 		// if (!file)
 		// 	return (1);

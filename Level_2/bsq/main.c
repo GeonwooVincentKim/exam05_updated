@@ -20,6 +20,7 @@ void	free_map(char **map)
 
 bool	firstline_checker(char *line, ssize_t nread)
 {
+	(void)nread; // Suppress unused parameter warning
 	ssize_t		index = 0;
 
 	//First
@@ -116,13 +117,16 @@ int		main(int argc, char ** argv)
 		size_t	array = 0;
 		size_t	index = 0;
 
-		while ((nread = getline(&line, &len, stdin)) != -1 && array < map_array)
+		while ((nread = getline(&line, &len, stdin)) != -1 && array < (size_t)map_array)
 		{
 			fprintf(stdout, "%s\n", line);
 			map[array] = (char *)calloc(len + 1, sizeof(char));
 			index = 0;
 			while (index < len)
-				map[array][index] = line[index++];
+			{
+				map[array][index] = line[index];
+				index++;
+			}
 			map[array][index] = '\0';
 			array++;
 

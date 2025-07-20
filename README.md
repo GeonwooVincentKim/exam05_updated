@@ -134,6 +134,10 @@ g++ -Wall -Wextra -Werror *.cpp -o bigint
 g++ -Wall -Wextra -Werror *.cpp -o vect2
 ./vect2
 
+# Level_1 string_bigint
+gcc -Wall -Wextra -Werror -lstdc++ *.cpp -o string_bigint
+./string_bigint
+
 # Level_1 polyset
 g++ -Wall -Wextra -Werror *.cpp -o polyset
 ./polyset 1 2 3 4 5

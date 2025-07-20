@@ -1,4 +1,4 @@
-#include "bigint_refactored.hpp"
+#include "bigint.hpp"
 
 // clear && c++ -g main.cpp bigint.cpp bigint.hpp && valgrind --leak-check=full --show-leak-kinds=all ./a.out
 int	main(void)

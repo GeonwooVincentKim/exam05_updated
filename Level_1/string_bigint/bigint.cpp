@@ -18,6 +18,14 @@ bigint::bigint(const bigint& original)
 	*this = original;
 }
 
+bigint& bigint::operator=(const bigint& other)
+{
+	if (this != &other) {
+		this->_string = other._string;
+	}
+	return *this;
+}
+
 bigint::~bigint() {}
 
 

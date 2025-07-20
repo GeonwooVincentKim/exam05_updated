@@ -12,6 +12,7 @@ class	bigint
 		bigint();
 		bigint(unsigned int n);
 		bigint(const bigint& original);
+		bigint& operator=(const bigint& other);
 		~bigint();
 
 	//getValue

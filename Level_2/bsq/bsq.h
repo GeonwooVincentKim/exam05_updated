@@ -1,17 +1,25 @@
-#include <string.h>
+#ifndef BSQ_H
+#define BSQ_H
+
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>// free
-#include <stdbool.h>// for bool
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
-	extern ssize_t		map_array;
-	extern char		    empty;
-	extern char		    obstacle;
-	extern char	    	full;
+// Map structure
+typedef struct {
+	int lines, width;
+	char empty, obstacle, full;
+	char **map;
+} Map;
 
+// Function declarations
+Map* read_map(char *filename);
+int validate_map(Map *map);
+void solve_bsq(Map *map);
+void print_map(Map *map);
+void free_map(Map *map);
+void process_file(char *filename);
+int min3(int a, int b, int c);
 
-//focus functions->
-// calloc, free, fopen, fclose, getline, fprintf
-
-void	ft_bsq_from_stdin(FILE *stream);
-void	ft_bsq(char **argv); 
+#endif // BSQ_H 

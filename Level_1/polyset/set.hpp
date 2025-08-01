@@ -13,9 +13,9 @@ public:
     
     void insert(int item);
     void insert(int* items, int count);
-    bool has(int item) const;
-    void print() const;
-    void clear();
-    searchable_bag& get_bag();
-    const searchable_bag& get_bag() const;
+    bool has(int item) const { return bag.has(item); }
+    void print() const { bag.print(); }
+    void clear() { bag.clear(); }
+    searchable_bag& get_bag() { return bag; }
+    const searchable_bag& get_bag() const { return bag; }
 }; 

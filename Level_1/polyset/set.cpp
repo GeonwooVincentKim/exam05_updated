@@ -23,24 +23,4 @@ void set::insert(int* items, int count) {
     for (int i = 0; i < count; i++) {
         insert(items[i]);
     }
-}
-
-bool set::has(int item) const {
-    return bag.has(item);
-}
-
-void set::print() const {
-    bag.print();
-}
-
-void set::clear() {
-    bag.clear();
-}
-
-searchable_bag& set::get_bag() {
-    return bag;
-}
-
-const searchable_bag& set::get_bag() const {
-    return bag;
 } 

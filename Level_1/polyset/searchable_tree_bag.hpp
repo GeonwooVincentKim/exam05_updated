@@ -1,6 +1,7 @@
 #pragma once
-#include "searchable_bag.hpp"
 #include "tree_bag.hpp"
+#include "searchable_bag.hpp"
+
 class searchable_tree_bag : public searchable_bag, public tree_bag {
 public:
     searchable_tree_bag() : tree_bag() {}
@@ -9,12 +10,7 @@ public:
         if (this != &other) tree_bag::operator=(other);
         return *this;
     }
-    bool has(int item) const {
-        node* current = tree;
-        while (current) {
-            if (item == current->value) return true;
-            current = (item > current->value) ? current->r : current->l;
-        }
-        return false;
-    }
+    ~searchable_tree_bag() override = default;
+
+    bool has(int item) const override;
 }; 

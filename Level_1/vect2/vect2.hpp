@@ -1,56 +1,65 @@
-#include <string>
+#ifndef VECT2_HPP
+#define VECT2_HPP
+
 #include <iostream>
-#include <ostream>
 #include <vector>
 
-class vect2
-{
-	private:
-		std::vector<int>	_container;
+class vect2 {
+private:
+    std::vector<int> _container;
 
-	public:
-		vect2();//default constructor, add ": _container()"
-		vect2(int v1, int v2);//initalise constructor
-		vect2(const vect2& original);//copy constructor
-		~vect2();//	Destructor
-
-	int	getContainer_elements(int array) const;
-
-	
-	//handle operators for '+', '-' and '*';
-	//	addition ASSIGNMENT operators
-		// +
-		vect2	operator+(int add) const;
-		vect2	operator+(const vect2 addon) const;
-		vect2&	operator++(void);// ++(pre)Increment
-		vect2	operator++(int);// ++(post)Increment
-
-	//	substraction ASSIGNMENT operators
-		// -
-		vect2	operator-(int add) const;
-		vect2	operator-(const vect2 addon) const;
-		vect2&	operator--(void);// --(pre)decrement operators
-		vect2	operator--(int);// --(post)decrement operators
-
-	//	multiplication ASSIGNMENT operators
-		// *
-		vect2	operator*(int multi) const;
-		vect2	operator*(const vect2 &multion) const;
-
-	//	equal(==) ASSIGNMENT operators
-		vect2&	operator=(const vect2& other);//	Copy Assignment Operator
-		bool	operator==(const vect2& other) const;// ==
-		bool	operator!=(const vect2& other) const;// !=
-		// +=
-		vect2   operator+=(int add);
-		vect2   operator+=(const vect2 &addon);
-		// -=
-		vect2   operator-=(int add);
-		vect2   operator-=(const vect2 &addon);
-		// *=
-		vect2   operator*=(int multi);
-		vect2   operator*=(const vect2 &multion);
+public:
+    // Constructors
+    vect2() : _container(2, 0) {}
+    vect2(int v1, int v2) : _container{v1, v2} {}
+    vect2(const vect2& original) : _container(original._container) {}
+    ~vect2() = default;
+    
+    // Assignment operator
+    vect2& operator=(const vect2& other) {
+        if (this != &other) {
+            _container = other._container;
+        }
+        return *this;
+    }
+    
+    // Accessor
+    int getContainer_elements(int index) const { return _container[index]; }
+    
+    // Arithmetic operators
+    vect2 operator+(int add) const;
+    vect2 operator+(const vect2& addon) const;
+    vect2 operator-(int minus) const;
+    vect2 operator-(const vect2& minuson) const;
+    vect2 operator*(int multi) const;
+    vect2 operator*(const vect2& multion) const;
+    
+    // Increment/Decrement operators
+    vect2& operator++() { ++_container[0]; ++_container[1]; return *this; }
+    vect2 operator++(int);
+    vect2& operator--() { --_container[0]; --_container[1]; return *this; }
+    vect2 operator--(int);
+    
+    // Compound assignment operators
+    vect2& operator+=(int add) { _container[0] += add; _container[1] += add; return *this; }
+    vect2& operator+=(const vect2& addon);
+    vect2& operator-=(int minus) { _container[0] -= minus; _container[1] -= minus; return *this; }
+    vect2& operator-=(const vect2& minuson);
+    vect2& operator*=(int multi) { _container[0] *= multi; _container[1] *= multi; return *this; }
+    vect2& operator*=(const vect2& multion);
+    
+    // Comparison operators
+    bool operator==(const vect2& other) const {
+        return _container[0] == other._container[0] && _container[1] == other._container[1];
+    }
+    bool operator!=(const vect2& other) const { return !(*this == other); }
+    
+    // Friend function for scalar multiplication
+    friend vect2 operator*(int number, const vect2& vector) { return vector * number; }
+    friend std::ostream& operator<<(std::ostream& out, const vect2& v) {
+        out << "{" << v._container[0] << ", " << v._container[1] << "}";
+        return out;
+    }
 };
 
-vect2	operator*(int number, const vect2& vector);
-std::ostream& operator<<(std::ostream& out, const vect2& v); 
+#endif // VECT2_HPP 

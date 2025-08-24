@@ -1,16 +1,22 @@
 #include "bsq.h"
 
-// Helper function to find minimum of three values
 int min3(int a, int b, int c) {
-	return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);
+	if (a <= b && a <= c) return a;
+	if (b <= a && b <= c) return b;
+	return c;
 }
 
-// Read map from file or stdin
 Map* read_map(char *filename) {
 	FILE *file = filename ? fopen(filename, "r") : stdin;
 	if (!file) return NULL;
 	
 	Map *map = malloc(sizeof(Map));
+	if (!map) {
+		if (filename) fclose(file);
+		return NULL;
+	}
+	
+	// Read first line: number of lines, empty char, obstacle char, full char
 	if (fscanf(file, "%d %c %c %c\n", &map->lines, &map->empty, 
 				&map->obstacle, &map->full) != 4) {
 		free(map);
@@ -18,24 +24,68 @@ Map* read_map(char *filename) {
 		return NULL;
 	}
 	
-	map->map = malloc(map->lines * sizeof(char*));
-	map->width = 0;
+	// Validate characters are different
+	if (map->empty == map->obstacle || map->empty == map->full || 
+		map->obstacle == map->full) {
+		free(map);
+		if (filename) fclose(file);
+		return NULL;
+	}
 	
+	// Validate number of lines
+	if (map->lines <= 0) {
+		free(map);
+		if (filename) fclose(file);
+		return NULL;
+	}
+	
+	// Allocate map array
+	map->map = malloc(map->lines * sizeof(char*));
+	if (!map->map) {
+		free(map);
+		if (filename) fclose(file);
+		return NULL;
+	}
+	
+	// Read map lines (skip the first line which contains parameters)
 	for (int i = 0; i < map->lines; i++) {
 		char *line = NULL;
 		size_t len = 0;
-		if (getline(&line, &len, file) == -1) {
+		ssize_t read = getline(&line, &len, file);
+		
+		if (read == -1) {
+			// Cleanup on error
+			for (int j = 0; j < i; j++) {
+				free(map->map[j]);
+			}
+			free(map->map);
 			free(map);
 			if (filename) fclose(file);
 			return NULL;
 		}
 		
-		// Remove newline
-		int line_len = strlen(line);
-		if (line[line_len - 1] == '\n') line[line_len - 1] = '\0';
+		// Remove newline and carriage return
+		if (read > 0) {
+			if (line[read - 1] == '\n') {
+				line[read - 1] = '\0';
+				read--;
+			}
+			if (read > 0 && line[read - 1] == '\r') {
+				line[read - 1] = '\0';
+				read--;
+			}
+		}
 		
-		if (i == 0) map->width = strlen(line);
-		else if ((int)strlen(line) != map->width) {
+		// Set width from first line
+		if (i == 0) {
+			map->width = read;
+		} else if (read != map->width) {
+			// All lines must have same length
+			for (int j = 0; j < i; j++) {
+				free(map->map[j]);
+			}
+			free(line);
+			free(map->map);
 			free(map);
 			if (filename) fclose(file);
 			return NULL;
@@ -48,27 +98,35 @@ Map* read_map(char *filename) {
 	return map;
 }
 
-// Validate map
 int validate_map(Map *map) {
 	if (!map || map->lines <= 0 || map->width <= 0) return 0;
-	if (map->empty == map->obstacle || map->empty == map->full || 
-		map->obstacle == map->full) return 0;
 	
+	// Check all characters are valid
 	for (int i = 0; i < map->lines; i++) {
 		for (int j = 0; j < map->width; j++) {
 			char c = map->map[i][j];
-			if (c != map->empty && c != map->obstacle) return 0;
+			if (c != map->empty && c != map->obstacle) {
+				return 0;
+			}
 		}
 	}
 	return 1;
 }
 
-// Solve BSQ using dynamic programming
 void solve_bsq(Map *map) {
 	// Create DP table
 	int **dp = malloc(map->lines * sizeof(int*));
+	if (!dp) return;
+	
 	for (int i = 0; i < map->lines; i++) {
 		dp[i] = calloc(map->width, sizeof(int));
+		if (!dp[i]) {
+			for (int j = 0; j < i; j++) {
+				free(dp[j]);
+			}
+			free(dp);
+			return;
+		}
 	}
 	
 	int max_size = 0, best_i = 0, best_j = 0;
@@ -93,12 +151,14 @@ void solve_bsq(Map *map) {
 	}
 	
 	// Fill the square
-	int start_i = best_i - max_size + 1;
-	int start_j = best_j - max_size + 1;
-	
-	for (int i = start_i; i < start_i + max_size; i++) {
-		for (int j = start_j; j < start_j + max_size; j++) {
-			map->map[i][j] = map->full;
+	if (max_size > 0) {
+		int start_i = best_i - max_size + 1;
+		int start_j = best_j - max_size + 1;
+		
+		for (int i = start_i; i <= best_i; i++) {
+			for (int j = start_j; j <= best_j; j++) {
+				map->map[i][j] = map->full;
+			}
 		}
 	}
 	
@@ -109,24 +169,25 @@ void solve_bsq(Map *map) {
 	free(dp);
 }
 
-// Print map
 void print_map(Map *map) {
 	for (int i = 0; i < map->lines; i++) {
 		printf("%s\n", map->map[i]);
 	}
 }
 
-// Free map memory
-void	free_map(Map *map) {
+void free_map(Map *map) {
 	if (!map) return;
-	for (int i = 0; i < map->lines; i++) {
-		free(map->map[i]);
+	if (map->map) {
+		for (int i = 0; i < map->lines; i++) {
+			if (map->map[i]) {
+				free(map->map[i]);
+			}
+		}
+		free(map->map);
 	}
-	free(map->map);
 	free(map);
 }
 
-// Process single file
 void process_file(char *filename) {
 	Map *map = read_map(filename);
 	if (!map || !validate_map(map)) {
@@ -140,7 +201,6 @@ void process_file(char *filename) {
 	free_map(map);
 }
 
-// Main function
 int main(int argc, char **argv) {
 	if (argc == 1) {
 		process_file(NULL);  // Read from stdin

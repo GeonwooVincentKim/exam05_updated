@@ -137,4 +137,4 @@ void game_of_life(int width, int height, int iterations) {
     
     print_board(board, width, height);
     free_board(board, height);
-} 
+}

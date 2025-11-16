@@ -8,8 +8,8 @@
 
 // Map structure
 typedef struct {
-	int lines, width;
-	char empty, obstacle, full;
+	int l, w;      // lines, width
+	char e, o, f;  // empty, obstacle, full
 	char **map;
 } Map;
 
@@ -20,6 +20,6 @@ void solve_bsq(Map *map);
 void print_map(Map *map);
 void free_map(Map *map);
 void process_file(char *filename);
-int min3(int a, int b, int c);
+static int min3(int a, int b, int c);
 
 #endif // BSQ_H 
